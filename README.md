@@ -1,5 +1,5 @@
-# Opencv-Mediapipe-demo
-a simple opencv mediapipe demo to recognize humans hands and attach specific gestures to different functions
+# OpenCV-Mediapipe-demo
+A simple opencv mediapipe demo to recognize humans hands and attach specific gestures to different functions
 
 ## Env Setup
 (Recommanded) Create virtual environment
