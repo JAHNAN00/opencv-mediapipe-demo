@@ -37,7 +37,13 @@ def main():
         # 将图像颜色空间转换回BGR，以便使用OpenCV显示。
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
-        
+        #凸包
+        hull_index = [0, 1, 2, 3, 6, 10, 14, 19, 18, 17, 10]
+
+        #记录左右手的手势
+        left_ges=None
+        right_ges=None
+
         if results.multi_hand_landmarks:
             for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
                 # 绘制手部关键点和连线。
@@ -54,16 +60,15 @@ def main():
                         pos_y = hand.landmark[i].y * image_height
                         list_lms.append([int(pos_x), int(pos_y)])
                     list_lms = np.array(list_lms, dtype=np.int32)
-                    #凸包
-                    hull_index = [0, 1, 2, 3, 6, 10, 14, 19, 18, 17, 10]
+                    
                     hull = cv2.convexHull(list_lms[hull_index, :])
                     cv2.polylines(image, [hull], True, (0, 255, 0), 2)
 
-                    print("left")
+                    #print("left")
                     pass
 
                 elif hand_side=="Right":
-                    print("right")
+                    #print("right")
                     pass
 
         # 显示结果。
