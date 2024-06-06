@@ -4,6 +4,7 @@
 import cv2
 import mediapipe as mp
 import numpy as np
+from src.beep import beep
 
 
 def main():
@@ -79,15 +80,29 @@ def main():
 
         # 识别手势
         fingers_index = [4,8,12,16,20] #手指端部
+        
+        out_fingers=dict()
+        for hand_side in ["Left","Right"]:
+            out_fingers[hand_side]=list()
+            for i in fingers_index:
+                if hand[hand_side]["exist"]:
+                    pt = (int(hand[hand_side]["points"][i][0]), int(hand[hand_side]["points"][i][1]))
+                    dist = cv2.pointPolygonTest(hand[hand_side]["hull"], pt, True)
+                    if dist < 0:
+                        out_fingers[hand_side].append(i)
+        
+        print(out_fingers["Left"],out_fingers["Right"])
 
-        up_fingers = []
-        for i in fingers_index:
-            if hand["Right"]["exist"]:
-                pt = (int(hand["Right"]["points"][i][0]), int(hand["Right"]["points"][i][1]))
-                dist = cv2.pointPolygonTest(hand["Right"]["hull"], pt, True)
-                if dist < 0:
-                    up_fingers.append(i)
-        print(up_fingers)
+        if 4 in out_fingers["Left"]:
+            beep()
+        # up_fingers = []
+        # for i in fingers_index:
+        #     if hand["Right"]["exist"]:
+        #         pt = (int(hand["Right"]["points"][i][0]), int(hand["Right"]["points"][i][1]))
+        #         dist = cv2.pointPolygonTest(hand["Right"]["hull"], pt, True)
+        #         if dist < 0:
+        #             up_fingers.append(i)
+        # print(up_fingers)
 
         # 显示结果。
         cv2.imshow('Hand Tracking', image)
