@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Page Switch</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function fetchPageSelector() {
+                $.getJSON('/get_page_selector', function(data) {
+                    var page = data.page_selector;
+                    if (page == 0) {
+                        $('#content').html('<h1>Nothing happened</h1>');
+                    } else {
+                        $('#content').html('<h1>Alert!!!</h1>');
+                    }
+                }).fail(function() {
+                    console.error("Error fetching data from server.");
+                    $('#content').html('<h1>Error loading data!</h1>');
+                });
+            }
+            setInterval(fetchPageSelector, 200); // 每5秒请求一次
+            fetchPageSelector(); // 初始请求一次
+        });
+    </script>
+</head>
+<body>
+    <div id="content"><h1>This is Page 1</h1></div>
+</body>
+</html>

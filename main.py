@@ -5,6 +5,7 @@ import cv2
 import mediapipe as mp
 import numpy as np
 from src.beep import beep
+from src.warn import warn_start,warn_change
 
 
 def main():
@@ -19,6 +20,9 @@ def main():
 
     # 启动摄像头。
     cap = cv2.VideoCapture(0)
+
+    # 启动警告页面
+    warn_start()
 
     while cap.isOpened():
         ret, frame = cap.read()
@@ -79,7 +83,7 @@ def main():
                               (0, 255, 0), 2)
 
         # 识别手势
-        fingers_index = [4,8,12,16,20] #手指端部
+        fingers_index = [4,8,12,16,20] #拇指，食指，中指，无名指，小指
         
         out_fingers=dict()
         for hand_side in ["Left","Right"]:
@@ -91,10 +95,15 @@ def main():
                     if dist < 0:
                         out_fingers[hand_side].append(i)
         
-        print(out_fingers["Left"],out_fingers["Right"])
-
-        if 4 in out_fingers["Left"]:
+        #执行动作
+        if out_fingers["Left"]==[4,8,20] and out_fingers["Right"]==[4,8,20]:
+            #左手举1 2，右手蜘蛛侠
             beep()
+        if out_fingers["Right"]==[4,8]:
+            #右手
+            warn_change(1)
+        else:
+            warn_change(0)
         # up_fingers = []
         # for i in fingers_index:
         #     if hand["Right"]["exist"]:
